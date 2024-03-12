@@ -1,11 +1,10 @@
+import express from "express"
 import puppeteer from "puppeteer-core";
 import { createCursor } from "ghost-cursor";
 
 import fs from "node:fs/promises";
 
-
-
-
+const app = express()
 const currentDate = new Date();
 const formattedDate = currentDate.toLocaleDateString("en-US", {
   day: "2-digit",
@@ -103,102 +102,111 @@ async function createCase(page, cursor) {
     console.log(error);
   }
 }
-
-(async () => {
-  // Launch the browser and open a new blank page
-  const browser = await puppeteer.launch({
-    headless: false,
-    defaultViewport: false,
-    executablePath: 'C:/Users/320204478/AppData/Local/Google/Chrome/Application/chrome.exe'
-  });
-  const page = await browser.newPage();
-  const cursor = createCursor(page);
-
- //ServiceMax START
-  // LOGIN
-
-  await page.goto("https://philipsb2bsc.my.salesforce.com/console")
-  await page.waitForSelector("#i0116")
-  await page.type("#i0116", "yesayi.suprikyan@philips.com")
-  await page.click("#idSIButton9")
-
-  await Promise.all([
-    page.waitForSelector("#i0118"),
-  page.type("#i0118", "Amazon03!!")
-  ]).then( ()=> console.log("Success"))
- await cursor.click("#idSIButton9")
-
-
- 
-page.waitForNavigation().then(async ()=>{
-  const searchCase = await page.waitForSelector("#phSearchInput")
-await searchCase.type(caseNumber)
-
-  await searchCase.press("Enter")
-  console.log("Enter")
+app.get('/', async (req, res)=>{
   
-
+    // Launch the browser and open a new blank page
+    const browser = await puppeteer.launch({
+      headless: false,
+      defaultViewport: false,
+      executablePath: 'C:/Users/320204478/AppData/Local/Google/Chrome/Application/chrome.exe'
+    });
+    const page = await browser.newPage();
+    const cursor = createCursor(page);
+  
+   //ServiceMax START
+    // LOGIN
+  
+    await page.goto("https://philipsb2bsc.my.salesforce.com/console")
+    await page.waitForSelector("#i0116")
+    await page.type("#i0116", "yesayi.suprikyan@philips.com")
+    await page.click("#idSIButton9")
+  
+    await Promise.all([
+      page.waitForSelector("#i0118"),
+    page.type("#i0118", "Amazon03!!")
+    ]).then( ()=> console.log("Success"))
+   await cursor.click("#idSIButton9")
   
   
-
-}).catch((e)=> console.log(e)).finally(async()=>{
+   
+  page.waitForNavigation().then(async ()=>{
+    const searchCase = await page.waitForSelector("#phSearchInput")
+  await searchCase.type(caseNumber)
   
-  console.log("Search completed.")
-  try {
-    await page.waitForNavigation()
-    const element = await page.$$eval('a', (el)=> el.value === "0123171144" ? el : ()=> {throw new Error("Unable to find case, Check case number.")})
-    await element.click()
-  } catch (error) {
-    console.log(error)
-  }
+    await searchCase.press("Enter")
+    console.log("Enter")
+    
+  
+    
+    
+  
+  }).catch((e)=> console.log(e)).finally(async()=>{
+    
+    console.log("Search completed.")
+    try {
+      await page.waitForNavigation()
+      const element = await page.$$eval('a', (el)=> el.value === "0123171144" ? el : ()=> {throw new Error("Unable to find case, Check case number.")})
+      await element.click()
+    } catch (error) {
+      console.log(error)
+    }
+  })
+   
+    
+  
+  
+  
+   //ServiceMax END
+  
+    
+    // await page.goto(
+    //   "https://spectranetics.myassurx.com/assurx/main.aspx?WCI=Main&WCE=ViewDashboard&WCU=s%3dDEX3426JOUCNM035YCOI3ZS0YV6KK7R4017%7c*%7er%3dVOLC%20Home%20Page%7c*%7eq%3d1"
+    // );
+  
+    // if (cookiesFromBrowser.length > 0)
+    //   await page.setCookie(...cookiesFromBrowser);
+    // else {
+    //   await page.waitForSelector("#CTRLCompany");
+  
+    //   await cursor.click("#CTRLCompany");
+    //   await page.type("#CTRLCompany", "Spectranetics");
+    //   await cursor.click("#CTRLemployeeid");
+    //   await page.type("#CTRLemployeeid", "320204478");
+    //   const element = await page.waitForSelector("#CTRLPasswordPrompt");
+  
+    //   await element.type("Deeznuts4!");
+    //   const btnSubmit = await page.waitForSelector("button");
+    //   await btnSubmit.click();
+    // }
+  
+    // await page.waitForSelector("#TDWinButtonsRowTopComplaintVOLCFolderHomePage");
+  
+    // createCase(page, cursor);
+    // await page.goto(
+    //   "main.aspx?WCI=Main&WCE=DrillDown&WCU=r%3dComplaint%20VOLC%20Folder%20Home%20Page%7c*%7ep%3dDisplay%20Parts%7c*%7ef%3dDisplay%20Part%20%2D%20Virtual%20Folders%7c*%7eq%3dLongText004%7c*%7ea%3dVOLC%20Home%20Page%7c*%7eb%3d1%7c*%7eo%3dAdminSubcomponent%7c*%7es%3dIV13YJ79SY3ERRQUINT7MLZQTM6NBWN4017"
+    // );
+    // await page.goto(
+    //   "https://spectranetics.myassurx.com/assurx/main.aspx?WCI=Main&WCE=ViewDashboard&WCU=s%3d4UK98Z7TRWJPV8ON0SUN8PTO5XQ1EVLL017%7c*%7er%3dVOLC%20Home%20Page%7c*%7eq%3d1", {delay: 35}
+    // );
+    // await page.type(".k_my-input", "Yerevan", { delay: 500 });
+    // await cursor.click(".JyN0-name-container");
+    // await page.type("[data-test-destination]", "Brussel");
+    // const element = await page.waitForSelector('[aria-label="Brussel, België"]');
+    // await cursor.click(element);
+    // await page.goto(
+    //   "https://www.momondo.be/flight-search/BRU-EVN/2024-01-10/2024-01-24?sort=bestflight_a"
+    // );
+    // const button = await page.waitForSelector(".oVHK");
+    // await cursor.click(button);
+    // await page.waitForSelector(".OQa--right-container").innerText;
+    //   await browser.close();
+  ;
 })
- 
-  
 
 
 
- //ServiceMax END
 
-  
-  // await page.goto(
-  //   "https://spectranetics.myassurx.com/assurx/main.aspx?WCI=Main&WCE=ViewDashboard&WCU=s%3dDEX3426JOUCNM035YCOI3ZS0YV6KK7R4017%7c*%7er%3dVOLC%20Home%20Page%7c*%7eq%3d1"
-  // );
 
-  // if (cookiesFromBrowser.length > 0)
-  //   await page.setCookie(...cookiesFromBrowser);
-  // else {
-  //   await page.waitForSelector("#CTRLCompany");
-
-  //   await cursor.click("#CTRLCompany");
-  //   await page.type("#CTRLCompany", "Spectranetics");
-  //   await cursor.click("#CTRLemployeeid");
-  //   await page.type("#CTRLemployeeid", "320204478");
-  //   const element = await page.waitForSelector("#CTRLPasswordPrompt");
-
-  //   await element.type("Deeznuts4!");
-  //   const btnSubmit = await page.waitForSelector("button");
-  //   await btnSubmit.click();
-  // }
-
-  // await page.waitForSelector("#TDWinButtonsRowTopComplaintVOLCFolderHomePage");
-
-  // createCase(page, cursor);
-  // await page.goto(
-  //   "main.aspx?WCI=Main&WCE=DrillDown&WCU=r%3dComplaint%20VOLC%20Folder%20Home%20Page%7c*%7ep%3dDisplay%20Parts%7c*%7ef%3dDisplay%20Part%20%2D%20Virtual%20Folders%7c*%7eq%3dLongText004%7c*%7ea%3dVOLC%20Home%20Page%7c*%7eb%3d1%7c*%7eo%3dAdminSubcomponent%7c*%7es%3dIV13YJ79SY3ERRQUINT7MLZQTM6NBWN4017"
-  // );
-  // await page.goto(
-  //   "https://spectranetics.myassurx.com/assurx/main.aspx?WCI=Main&WCE=ViewDashboard&WCU=s%3d4UK98Z7TRWJPV8ON0SUN8PTO5XQ1EVLL017%7c*%7er%3dVOLC%20Home%20Page%7c*%7eq%3d1", {delay: 35}
-  // );
-  // await page.type(".k_my-input", "Yerevan", { delay: 500 });
-  // await cursor.click(".JyN0-name-container");
-  // await page.type("[data-test-destination]", "Brussel");
-  // const element = await page.waitForSelector('[aria-label="Brussel, België"]');
-  // await cursor.click(element);
-  // await page.goto(
-  //   "https://www.momondo.be/flight-search/BRU-EVN/2024-01-10/2024-01-24?sort=bestflight_a"
-  // );
-  // const button = await page.waitForSelector(".oVHK");
-  // await cursor.click(button);
-  // await page.waitForSelector(".OQa--right-container").innerText;
-  //   await browser.close();
-})();
+app.listen(3001, ()=>{
+  console.log("Backend stared...")
+})
