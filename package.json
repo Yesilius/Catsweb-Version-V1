@@ -1,0 +1,18 @@
+{
+  "name": "puppe",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ghost-cursor": "^1.2.0",
+    "git": "^0.1.5",
+    "path": "^0.12.7",
+    "puppeteer": "^21.6.1"
+  },
+  "type": "module"
+}
